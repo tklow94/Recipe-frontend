@@ -6,8 +6,14 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 // import Home from './components/onepirate/Home'
 import Home from './components/Home'
 import RecipeCard from './components/RecipeCard'
-import UserAccount from './components/UserAccount'
-import SearchUserContent from './components/SearchUserContent'
+import UserAccount from './components/UserHome/UserAccount'
+import NotUserPage from './components/NotUserPage'
+import Followers from './components/UserHome/Followers'
+import Explore from './components/Explore'
+import Feeds from './components/UserHome/Feeds'
+import UserSearch from './components/UserHome/UserSearch'
+
+
 
 
 
@@ -17,17 +23,31 @@ import SearchUserContent from './components/SearchUserContent'
 
 
 function App() {
-  const APP_ID = "688af3ce"
-  const APP_KEY = "2d13f387380e2ed037495f84be46e8d8"
+  const APP_ID = process.env.REACT_APP_RECIPE_ID
+  const APP_KEY = process.env.REACT_APP_RECIPE_API
 
   
   
-  const initialState = {username: "", password: "", password_confirmation: ""}
+  
+  const initialState = {username: "", password: "", password_confirmation: "", avatar: {}}
   const [entry, setEntry] = useState(initialState)
   const [recipe, setRecipe] = useState([])
   const [search, setSearch] = useState("")
   const [query, setQuery] = useState('chicken')
   const [userRecipes, setUserRecipes] = useState([])
+  // const [users, setUsers] = useState([])
+
+
+
+  // const getUsers = () => {
+  //   fetch("http://localhost:3000/users")
+  //     .then(res => res.json())
+  //     .then(data => setUsers(data.user))
+  // }
+
+  // useEffect(() => {
+  //   getUsers()
+  // }, [])
 
 
   const [comments, setComments] = useState([])
@@ -35,6 +55,7 @@ function App() {
   const API = `https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}&from=0&to=10`
 
 
+  
 
 
   const getRecipes =  () => {
@@ -43,22 +64,33 @@ function App() {
       
       .then(data => setRecipe(data.hits))
   }
-  const getUserRecipes =  () => {
-    fetch("http://localhost:3000/recipes")
-      .then(res => res.json())
-      
-      .then(data => setUserRecipes(data.recipes))
-  }
-
-  useEffect(() => {
-    getUserRecipes()
-  }, [])
 
 
-  useEffect(() => {
-    getRecipes();
-   
-  }, [query])
+ const getUserRecipes =  () => {
+  fetch("http://localhost:3000/recipes")
+    .then(res => res.json())
+    
+    .then(data => setUserRecipes(data.recipes))
+}
+
+useEffect(() => {
+  getUserRecipes()
+}, [])
+
+useEffect(() => {
+  getRecipes();
+ 
+}, [query])
+
+
+
+ 
+
+ 
+
+
+
+ 
 
   
 
@@ -77,16 +109,10 @@ function App() {
     })
   }
 
-    const protect = () => {
-      if(localStorage.token !== undefined){
-        return <Home recipe={recipe} search={search} setSearch={setSearch} setQuery={setQuery}/>
-      }else{
-        return <SignIn entry={entry} setEntry={setEntry} handleChange={handleChange}/>
-      }
-    }
     
 
-
+   
+  
 
 
   return (
@@ -97,13 +123,17 @@ function App() {
     
       <Switch>
 
-        <Route exact path="/"  render={protect }/>
-        <Route path="/recipecard" render={() => <RecipeCard comments={comments} setComments={setComments}/> }/>
-        <Route path="/userhome" render={() => <UserAccount  entry={entry} setEntry={setEntry} handleChange={handleChange} userRecipes={userRecipes} setUserRecipes={setUserRecipes} />}/>
+        <Route exact path="/"  render={() => localStorage.getItem("token") ? <Home recipe={recipe} search={search} setSearch={setSearch} setQuery={setQuery}/> : <SignIn entry={entry} setEntry={setEntry} handleChange={handleChange}/> }/>
+        <Route path="/recipecard/:id" render={() => localStorage.getItem("token") ? <RecipeCard comments={comments} setComments={setComments}/> : <SignIn entry={entry} setEntry={setEntry} handleChange={handleChange}/>  }/>
+        <Route path="/userhome" render={() => localStorage.getItem("token") ? <UserAccount   entry={entry} setEntry={setEntry} handleChange={handleChange} userRecipes={userRecipes} setUserRecipes={setUserRecipes} />:<SignIn entry={entry} setEntry={setEntry} handleChange={handleChange}/>}/>
         <Route path="/signup" render={() => <Signup entry={entry} setEntry={setEntry} handleChange={handleChange} /> }/>
       <Route path="/signin" render={()=> <SignIn entry={entry} setEntry={setEntry} handleChange={handleChange}/>}/>
-      <Route path="/userrecipe" render={()=> <SearchUserContent userRecipes={userRecipes} />}/>
-      
+      <Route path="/notuserpage/:id" render={()=> localStorage.getItem("token") ? <NotUserPage  />: <SignIn entry={entry} setEntry={setEntry} handleChange={handleChange}/> }/>
+    <Route path="/followings" render= {() => <Followers/>}/>
+    <Route path="/explore" render= {() => <Explore/>}/>
+    <Route path="/feeds" render= {() => <Feeds/>}/>
+    <Route path="/userSearch" render= {() => <UserSearch/>}/>
+
       </Switch>
     </div>
     </Router>

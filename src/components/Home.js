@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import AppAppBar from "./Header"
 import StickyFooter from './Footer'
 import Search from './Search'
@@ -13,7 +13,7 @@ function Home({recipe, search, setSearch, setQuery}) {
   
     
     
-
+    
     
     return (
         <div>

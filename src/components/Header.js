@@ -58,7 +58,7 @@ function AppAppBar(props) {
   }
 
   const signInLink = () => {
-    if(localStorage.token !== undefined){
+    if(localStorage.getItem("token")){
       return <Link
       color="inherit"
       variant="h6"
@@ -96,9 +96,9 @@ function AppAppBar(props) {
             underline="none"
             color="inherit"
             className={classes.title}
-            href="/premium-themes/onepirate/"
+            href="/"
           >
-            {'Chicken a la King'}
+            {'InstaGraham'}
           </Link>
      
           <div className={classes.right}>
@@ -109,9 +109,17 @@ function AppAppBar(props) {
               variant="h6"
               underline="none"
               className={clsx(classes.rightLink, classes.linkSecondary)}
+              href="/explore"
+            >
+              {'Explore'}
+            </Link>
+            <Link
+              variant="h6"
+              underline="none"
+              className={clsx(classes.rightLink, classes.linkSecondary)}
               href="/userhome"
             >
-              {'Account'}
+              {'Social'}
               {signInLink()}
             </Link>
           </div>

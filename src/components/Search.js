@@ -18,7 +18,6 @@ function Search({search, setSearch, setQuery}) {
     <input className="search-bar" type="text" value={search} onChange={updateSearch}></input>
                 <button className="search-button" type="submit">Search</button>
             </form>
-            <form><select><option>POtatoe</option></select></form>
         </div>
     )
 }

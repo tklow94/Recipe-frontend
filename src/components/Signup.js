@@ -1,11 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -13,6 +11,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Input from '@material-ui/core/Input';
 
 function Copyright() {
   return (
@@ -49,48 +48,81 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp(props) {
   const classes = useStyles();
-  const history = useHistory()
+  const history = useHistory();
 
-  const [users, setUsers] = useState([])
+  // const [users, setUsers] = useState([])
 
-  const getUsers = () => {
-    fetch("http://localhost:3000/users")
-      .then(res => res.json())
-      .then(data => setUsers(data.user))
+  // const getUsers = () => {
+  //   fetch("http://localhost:3000/users")
+  //     .then(res => res.json())
+  //     .then(data => setUsers(data.user))
+  // }
+  
+  
+
+  // useEffect(() => {
+  //   getUsers()
+  // }, [])
+
+  const onImage = (e) => {
+    e.persist()
+    
+    props.setEntry({
+      ...props.entry,
+      [e.target.name]: e.target.files[0]
+    })
+    console.log(e.target.files[0])
   }
-  
-  
 
-  useEffect(() => {
-    getUsers()
-  }, [])
+console.log(props.entry)
  
     const userSignUp = (e) => {
         e.preventDefault()
-        console.log(props.entry.password_confirmation)
-        console.log(props.entry.password)
           if (props.entry.password !== props.entry.password_confirmation){
             alert("Passwords don't match!")
           
         }else if (props.entry.username === ""){
           alert("Requires a Username")
         }
-        else if (users.find(user => user.username === props.entry.username)){
-          alert("Username Already Taken")
-        }
+        // else if (users.find(user => user.username === props.entry.username)){
+        //   alert("Username Already Taken")
+        // }
         else{
+          const form = new FormData()
+          form.append("username", props.entry.username)
+          form.append("password", props.entry.password)
+          form.append("avatar", props.entry.avatar)
           fetch("http://localhost:3000/users", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(props.entry)
+            // headers: {
+            //   "Content-Type": "application/json",
+            // },
+            body: form
+            // JSON.stringify(props.entry)
         
           })
-          .then(res => history.push("/signin"))
+          .then(res => res.json())
+          .then( data =>{ console.log(data)
+        localStorage.setItem("token", data.token)
+        if (data.token ){
+        history.push("/") 
+      }else{
+        alert("Username or Password Incorrect")
+        }
+      })
+          // )
           }
         }
-
+          // .then(res =>  fetch("http://localhost:3000/login", {
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json"
+          //   },
+          //   body: JSON.stringify(props.entry)
+           
+          // })
+       
+     
         
   return (
     <Container component="main" maxWidth="xs">
@@ -141,6 +173,11 @@ export default function SignUp(props) {
                 // autoComplete="current-password"
                 onChange={props.handleChange}
               />
+            </Grid>
+            <Grid item xs={12}>
+            <Grid item xs={12}>
+          <Input required type="file" name='avatar' onChange={onImage}></Input>
+        </Grid>
             </Grid>
           </Grid>
           <Button

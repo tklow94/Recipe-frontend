@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Link, useParams} from 'react-router-dom'
 import './App.css'
 import Signup from './components/Signup'
 import SignIn from './components/Signin'
@@ -12,6 +13,7 @@ import Followers from './components/UserHome/Followers'
 import Explore from './components/Explore'
 import Feeds from './components/UserHome/Feeds'
 import UserSearch from './components/UserHome/UserSearch'
+
 
 
 
@@ -109,9 +111,11 @@ useEffect(() => {
     })
   }
 
-    
 
-   
+
+  
+    
+  
   
 
 

@@ -2,54 +2,74 @@ import React, {useState, useEffect} from 'react'
 import {Link, useParams} from 'react-router-dom'
 import { FaTrashAlt } from 'react-icons/fa'
 import decode from 'jwt-decode'
-//onClick post to db to change like count by 1 using prevState. Make sure can only like once. Set true false statement such that when true is liked, when false is not liked
+import 'semantic-ui-css/semantic.min.css'
+import {  Header } from 'semantic-ui-react'
+import {SlideDown} from 'react-slidedown'
+import 'react-slidedown/lib/slidedown.css'
 
 function RecipeCard() {
+  const [rc, setRc] = useState(true)
  const {id} = useParams()
  const [recipe, setRecipe] = useState({ingredients: "there, ingreidnest"})
 const token = localStorage.getItem('token')
  const loggedUser = decode(localStorage.getItem("token"))
 const username = loggedUser.username
 const userId = loggedUser.user_id 
+const [reply, setReply] = useState("")
 const [userRecipes, setUserRecipes] = useState([])
 const [comments, setComments] = useState([])
-const [avatar, setAvatar] = useState("")
 
+const [avatar, setAvatar] = useState("")
 
 const [search, setSearch] = useState("")
 
 const updateSearch = (e) => {
   setSearch(e.target.value)
 }
+const getRecipe = () => {
+  fetch(`http://localhost:3000/recipes/${id}`)
+    .then(res => res.json())
+    .then(data => setRecipe(data))
+  }
+  
+ 
+ useEffect(() => {
+  getRecipe()
+ },[])
 
-
-const [reply, setReply] = useState("")
-
-const updateReply = (e) => {
-  // setReply(e.target.value)
-  console.log(e.target.value)
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-const fetchComments = () => {
-  fetch(`http://localhost:3000/recipes/${id}/comments`)
+ const fetchUserRecipes = () => {
+  fetch(`http://localhost:3000/recipes/${id}`, {
+    method: 'GET',
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
   .then(res => res.json())
-  .then(data => setComments(data.comments))
+  .then(data => {
+    setUserRecipes(data);
+    setAvatar(data.user.avatar)
+
+  })
 }
+
 useEffect(() => {
-fetchComments()
-},[comments])
+  fetchUserRecipes()
+  
+}, [])
+
+
+ const deleteRecipe = (id) => {
+
+  fetch(`http://localhost:3000/recipes/${id}`,{
+    method: "DELETE",
+    headers: {
+  "Authorization": `Bearer ${localStorage.getItem("token")}`,
+},
+  })
+    .then(res => fetchUserRecipes() )
+    alert('Recipe Has been Deleted')
+}
+
 
 
 const handleSubmit = (e) => {
@@ -69,41 +89,9 @@ const handleSubmit = (e) => {
       })
   })
   .then(res => res.json())
-  .then(data => console.log(data))
+  .then(data => getComments())
 
 }
-const handleReply = (commentId) => {
-  // e.preventDefault()
-  fetch(`http://localhost:3000/recipes/${id}/comments`,{
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-      "Authorization": `bearer ${token}`
-      },
-      body: JSON.stringify({
-        content: search,
-        recipe_id: id,
-        commentable_id: commentId,
-        commentable_type: "Comment",
-        user_id: userId
-      })
-  })
-  .then(res => res.json())
-  .then(data => console.log(data))
-
-}
-
-const getRecipe = () => {
-  fetch(`http://localhost:3000/recipes/${id}`)
-    .then(res => res.json())
-    .then(data => setRecipe(data))
-  }
-  
- 
- useEffect(() => {
-  getRecipe()
- },[])
-
 
 
 const getComments = () => {
@@ -113,79 +101,52 @@ const getComments = () => {
 
   }  
   useEffect(() => {
+    
     getComments()
    },[])
 
+const updateReply = (e) => {
+  console.log(e.target.name)
+  setReply(e.target.value)
 
-
-   const CommentBox = ({ comment, allComments }) => {
-    const children = allComments.filter(
-      (c) => c.commentable_type === "Comment" && c.commentable_id === comment.id
-    );
-  
-    return (
-      <li>
-        {comment.content}
-        {children ? <CommentBoxes comments={children} allComments={allComments} /> : null}
-        <input type="text" value={reply} onChange={updateReply}></input> <button>Reply</button>
-      </li>
-      
-    );
-  };
-
-  
- 
-  
-  const CommentBoxes = ({ comments, allComments }) => (
-    <ul>
-      {comments.map((c) => (
-        
-        <CommentBox comment={c} allComments={allComments} key={c.id}/>
-        
-      ))}
-      
-    </ul>
-    
-  );
-  
-  const App = () => {
-    const rootComments = comments.filter((c) => c.commentable_type === "Recipe");
-    return <CommentBoxes comments={rootComments} allComments={comments} />;
-  };
-  
-  
-   const fetchUserRecipes = () => {
-    fetch(`http://localhost:3000/recipes/${id}`, {
-      method: 'GET',
-      headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+}
+const handleReply = (cId) => e => {
+  e.preventDefault()
+  // console.log(key)
+  fetch(`http://localhost:3000/recipes/${id}/comments`,{
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+      "Authorization": `bearer ${token}`
       },
-    })
-    .then(res => res.json())
-    .then(data => {
-      setUserRecipes(data);
-      setAvatar(data.user.avatar)
- 
-    })
+      body: JSON.stringify({
+        content: reply,
+        recipe_id: id,
+        commentable_id: cId,
+        commentable_type: "Comment",
+        user_id: userId
+      })
+  })
+  .then(res => res.json())
+  .then(data => getComments())
+
+}
+
+
+  const tF = () => {
+    setRc(!rc)
   }
-  
-  useEffect(() => {
-    fetchUserRecipes()
-    
-  }, [])
+  const commentOrReply = () => {
 
-
-   const deleteRecipe = (id) => {
-
-    fetch(`http://localhost:3000/recipes/${id}`,{
-      method: "DELETE",
-      headers: {
-    "Authorization": `Bearer ${localStorage.getItem("token")}`,
-  },
-    })
-      .then(res => fetchUserRecipes() )
-      alert('Recipe Has been Deleted')
+    return rc ?  <form onSubmit={handleSubmit}>
+    <textarea value={search} onChange={updateSearch} style={{width:"100%"}} placeholder="Comments"></textarea>
+      <button type="submit" >Comment</button>
+    </form> : <form onSubmit={handleSubmit}>
+    <textarea value={search} onChange={updateSearch} style={{width:"100%"}} placeholder="Comments"></textarea>
+      <button type="submit" >Reply</button>
+    </form> 
   }
+
 
     return (
       
@@ -217,68 +178,77 @@ const getComments = () => {
     <li>{recipe.source}</li>
     </ol>
       </div>
+      <Header as='h3' dividing>
+      Comments
+    </Header>
+      <App comments={comments} reply={reply} handleReply={handleReply} updateReply={updateReply}/>
       <div>
-        <form onSubmit={handleSubmit}>
-        <textarea value={search} onChange={updateSearch} style={{width:"100%"}} placeholder="Comments"></textarea>
-          <button type="submit" >Comment</button>
-        </form>
+       {commentOrReply()}
       </div>
-      <App/>
       <Link to="/userhome">
 <button className="active-recipe__button">
                       GO BACK 
                     </button>
                     </Link>
     </div>
-      // onSubmit post <div> with reply button. On reply, post  another <div> with reply
-
-
-
-//         <div className="containers">
-//           <div className="cards">
-// <div className="card">
-//     <img className="active-recipe__img" src={recipe.img} alt="No Content Found" />
-//     <h3 className="active-recipe__title">{recipe.name}</h3>
-//     <h4 className="active-active-recipe__publisher">{recipe.source}</h4>
-//     <p className="active-recipe__website">Recipe:</p>
-
-//     <table >
-//   <tr>
-//     <th>Nutritient</th>
-//     <th>Percent </th> 
-//     <th>Daily Value</th>
-//   </tr>
-//   <tr>
-//     <td>Jill</td>
-//     <td>Smith</td>
-//     <td>50</td>
-//   </tr>
-//   <tr>
-//     <td>Eve</td>
-//     <td>Jackson</td>
-//     <td>94</td>
-//   </tr>
-//   <tr>
-//     <td>John</td>
-//     <td>Doe</td>
-//     <td>80</td>
-//   </tr>
-// </table>
-//     </div>
-// <br/><br/>
-// </div>
-/* <Link to="/userhome">
-<button className="active-recipe__button">
-                      GO BACK 
-                    </button>
-                    </Link> */
-            
-//             <br/><br/>
-//         <button onClick={handleClick}Submit Comment></button>
-      
-      
-//         </div>
+     
     )
 }
+const CommentBox = ({  cId, reply, updateReply, handleReply, comment, allComments }) => {
+  const children = allComments.filter(
+    (c) => c.commentable_type === "Comment" && c.commentable_id === comment.id
+  );
+
+
+  return (
+  
+    <div className="commentDiv">
+    <img className="commentImage" src={comment.avatar} alt="no Image"></img>
+  <h6>{comment.username}</h6>
+    <li style={{listStyleType: 'none', position:"relative", top:"5px"}}>
+           
+        {comment.content}
+    
+        <form onSubmit={handleReply(cId)}>
+        
+        <input name={cId} type="text" value={reply} onChange={updateReply}></input>
+        <button className="replyButton">Reply</button>
+       </form>
+     
+      {children ? <CommentBoxes  reply={reply} handleReply={handleReply} updateReply={updateReply} comments={children} allComments={allComments} /> : null}
+    
+    </li>
+ 
+
+    </div>
+    
+    
+  );
+};
+
+
+const CommentBoxes = ({  reply, handleReply, updateReply, comments, allComments }) => (
+  
+ <ul>
+    {comments.map((c) => (
+    
+      <CommentBox reply={reply} handleReply={handleReply} updateReply={updateReply} comment={c} allComments={allComments} cId={c.id}/>
+      
+    ))}
+   
+  </ul>
+  
+  
+  
+);
+
+const App = ({  reply, updateReply, handleReply, comments}) => {
+  const rootComments = comments.filter((c) => c.commentable_type === "Recipe");
+
+  return ( <div><CommentBoxes  reply={reply} handleReply={handleReply} updateReply={updateReply}  comments={rootComments} allComments={comments} />
+ 
+
+ </div>)
+};
 
 export default RecipeCard

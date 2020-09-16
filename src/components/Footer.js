@@ -37,13 +37,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function StickyFooter() {
   const classes = useStyles();
-
   return (
     <div>
-   
-
       <footer className={classes.footer}>
-
         <Container maxWidth="md">
           <Link href="https://github.com/MikaJakePizzaBake">
           <Typography variant="body1">Github</Typography>

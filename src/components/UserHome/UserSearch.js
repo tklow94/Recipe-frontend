@@ -105,8 +105,9 @@ const fetchRecipes = () => {
     .then(data => setRecipe(data.recipes))
 }
 useEffect(() => {
+    if(result)
     fetchRecipes()
-},[])
+},[result])
 
 const updateUserQuery = (e) => {
     setUserQuery(e.target.value)
@@ -140,7 +141,7 @@ const submitUser = (e) => {
     setUserResult(user);
     setUserQuery("")
 } 
-console.log(userResult)
+console.log(user)
 
 const handleSubmit = (e) => {
     e.preventDefault()
@@ -162,7 +163,7 @@ const mappedUsers = userResult.map(u => {return (
 
 const handleClick = () => {
     setResult([]); 
-    setUserResult([])
+    setUserResult([]);
 }
 
 
@@ -204,8 +205,9 @@ const handleClick = () => {
       </TabPanel>
    
     </div>
-    {mappedUsers}
     {mappedGoodies}
+    {mappedUsers}
+    
           </div>
 
       

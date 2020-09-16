@@ -1,9 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import decode from 'jwt-decode'
-import {Link} from 'react-router-dom'
-// import Masonry from 'react-masonry-css'
-// import Gallery from "react-photo-gallery";
-
 
 function Explore() {
 const loggedUser = decode(localStorage.getItem("token"))
@@ -19,9 +15,7 @@ const fetchRecipes = () => {
 useEffect(() => {
     fetchRecipes()
 },[])
-const shuffleArray = (array) => {
-    // let i = array.length -1
-   
+const shuffleArray = (array) => {   
     for (var i = array.length; i>1; i--){
         const r = Math.floor(Math.random()*(i))
         const temp = array[r]
@@ -31,12 +25,8 @@ const shuffleArray = (array) => {
     return array
 }
 const recipeFeed = recipe.filter(r => r.user_id !== userId)
-
 const shuffledPost = shuffleArray(recipeFeed)
-console.log(shuffledPost)
 const feed = shuffledPost.map(r => {return (
- 
-
     <div className="grid-block">
       <div className="tile">
         <a className="tile-link" href={`/recipecard/${r.id}`}>
@@ -45,16 +35,15 @@ const feed = shuffledPost.map(r => {return (
         </a>
       </div>
     </div>
- 
-
-   
 )})
-
-   
     return (
+      <body className="exploreBody">
+      <div className="wholePage">
         <div className="grid image-grid">
             {feed}
         </div>
+        </div>
+        </body>
     )
 }
 

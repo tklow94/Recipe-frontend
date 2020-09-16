@@ -8,17 +8,17 @@ html {
   box-sizing: inherit;
 }
 
-/* body {
+.exploreBody {
   margin: 0;
   min-height: 100vh;
   font-size: 1rem;
   line-height: 1.25;
   background-color: #18222d;
-} */
+}
 
 .grid {
   width: 100%;
-  max-width: 60rem;
+  max-width: 40rem;
   margin-left: auto;
   margin-right: auto;
 
@@ -34,13 +34,19 @@ html {
   width: 50%;
   min-height: 11.25rem;
   padding: 1rem;
+  max-height: 400px;
+  display: block;
+  max-width:400px;
+
+  width: auto;
+  height: auto;
 }
 
 .image-grid {
-  -webkit-transform: rotateX(45deg) rotateZ(45deg);
+  /* -webkit-transform: rotateX(45deg) rotateZ(45deg);
   transform: rotateX(45deg) rotateZ(45deg);
   -webkit-perspective: 1000px;
-  perspective: 1000px;
+  perspective: 1000px; */
   
 }
 
@@ -55,6 +61,12 @@ html {
   left: 0;
   -webkit-transition-property: opacity, top, left, box-shadow;
   transition-property: opacity, top, left, box-shadow;
+  max-height: 200px;
+  display: block;
+  max-width:200px;
+
+  width: auto;
+  height: auto;
 
 }
 
@@ -92,5 +104,9 @@ html {
   box-shadow: 5px 5px rgba(244, 170, 200, 0.4),
     10px 10px rgba(244, 170, 200, 0.3), 15px 15px rgba(244, 170, 200, 0.2),
     20px 20px rgba(244, 170, 200, 0.1), 25px 25px rgba(244, 170, 200, 0.05);
+}
+
+.wholePage {
+  background-color: #18222d;
 }
 

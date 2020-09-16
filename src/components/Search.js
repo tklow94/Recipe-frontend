@@ -1,7 +1,6 @@
 import React from 'react'
 
 function Search({search, setSearch, setQuery}) {
-
     const updateSearch = (e) => {
         setSearch(e.target.value)
     }
@@ -11,7 +10,6 @@ function Search({search, setSearch, setQuery}) {
         setSearch('')
 
     }
-
     return (
         <div>
             <form onSubmit={getSearch} className="search-form"> 

@@ -4,20 +4,20 @@ import { FaTrashAlt } from 'react-icons/fa'
 import decode from 'jwt-decode'
 import 'semantic-ui-css/semantic.min.css'
 import {  Header } from 'semantic-ui-react'
-import {SlideDown} from 'react-slidedown'
 import 'react-slidedown/lib/slidedown.css'
 
 function RecipeCard() {
   const [rc, setRc] = useState(true)
  const {id} = useParams()
- const [recipe, setRecipe] = useState({ingredients: "there, ingreidnest"})
+ const [recipe, setRecipe] = useState({ingredients: "there, ingreidnest", source: "things. here."})
 const token = localStorage.getItem('token')
  const loggedUser = decode(localStorage.getItem("token"))
 const username = loggedUser.username
 const userId = loggedUser.user_id 
 const [reply, setReply] = useState("")
-const [userRecipes, setUserRecipes] = useState([])
 const [comments, setComments] = useState([])
+const [userRecipes, setUserRecipes] = useState([])
+
 
 const [avatar, setAvatar] = useState("")
 
@@ -53,6 +53,7 @@ const getRecipe = () => {
 }
 
 useEffect(() => {
+
   fetchUserRecipes()
   
 }, [])
@@ -66,8 +67,8 @@ useEffect(() => {
   "Authorization": `Bearer ${localStorage.getItem("token")}`,
 },
   })
-    .then(res => fetchUserRecipes() )
-    alert('Recipe Has been Deleted')
+    // .then(res => fetchUserRecipes() )
+    // alert('Recipe Has been Deleted')
 }
 
 
@@ -112,7 +113,6 @@ const updateReply = (e) => {
 }
 const handleReply = (cId) => e => {
   e.preventDefault()
-  // console.log(key)
   fetch(`http://localhost:3000/recipes/${id}/comments`,{
     method: "POST",
     headers: {
@@ -133,9 +133,6 @@ const handleReply = (cId) => e => {
 }
 
 
-  const tF = () => {
-    setRc(!rc)
-  }
   const commentOrReply = () => {
 
     return rc ?  <form onSubmit={handleSubmit}>
@@ -157,9 +154,10 @@ const handleReply = (cId) => e => {
           {recipe.user_id=== userId ? <button onClick={() => deleteRecipe(recipe.id)} className="astext" style={{ fontSize: "20px"}}><FaTrashAlt/></button> : null}
 
         </Link>
+        
         {userRecipes.user_id !== userId ? <Link to={`/notuserpage/${userRecipes.user_id}`}><img style={{borderRadius: "50%", width: "50px",
-    height: "50px", float: "right", objectFit: "cover", position:"relative", top: "-8px"}} src={avatar}></img></Link> : <Link to={`/userhome`}><img style={{borderRadius: "50%", width: "50px",
-    height: "50px", float: "right", objectFit: "cover", position:"relative", top: "-8px"}} src={avatar}></img></Link>}
+    height: "50px", float: "right", objectFit: "cover",  position:"relative", top: "-12px"}} src={avatar}></img></Link> : <Link to={`/userhome`}><img style={{borderRadius: "50%", width: "50px",
+    height: "50px", float: "right", objectFit: "cover", position:"relative", top: "-12px"}} src={avatar}></img></Link>}
        
         </div>
        <div id="recipe-image"><img id="recipe-image" src={recipe.img}></img></div>
@@ -175,7 +173,7 @@ const handleReply = (cId) => e => {
       <div id="method">
       <span class="card-item-title">Method</span>
         <ol>
-    <li>{recipe.source}</li>
+    {recipe.source.split(".").map(i => <li>{i}</li>)}
     </ol>
       </div>
       <Header as='h3' dividing>
@@ -199,55 +197,33 @@ const CommentBox = ({  cId, reply, updateReply, handleReply, comment, allComment
     (c) => c.commentable_type === "Comment" && c.commentable_id === comment.id
   );
 
-
   return (
-  
     <div className="commentDiv">
     <img className="commentImage" src={comment.avatar} alt="no Image"></img>
   <h6>{comment.username}</h6>
-    <li style={{listStyleType: 'none', position:"relative", top:"5px"}}>
-           
+    <li style={{listStyleType: 'none', position:"relative", top:"5px"}}>    
         {comment.content}
-    
         <form onSubmit={handleReply(cId)}>
-        
-        <input name={cId} type="text" value={reply} onChange={updateReply}></input>
+        {/* <input name={cId} type="text" value={reply} onChange={updateReply}></input> */}
         <button className="replyButton">Reply</button>
        </form>
-     
       {children ? <CommentBoxes  reply={reply} handleReply={handleReply} updateReply={updateReply} comments={children} allComments={allComments} /> : null}
-    
     </li>
- 
-
     </div>
-    
-    
   );
 };
 
-
 const CommentBoxes = ({  reply, handleReply, updateReply, comments, allComments }) => (
-  
  <ul>
     {comments.map((c) => (
-    
       <CommentBox reply={reply} handleReply={handleReply} updateReply={updateReply} comment={c} allComments={allComments} cId={c.id}/>
-      
     ))}
-   
   </ul>
-  
-  
-  
 );
 
 const App = ({  reply, updateReply, handleReply, comments}) => {
   const rootComments = comments.filter((c) => c.commentable_type === "Recipe");
-
   return ( <div><CommentBoxes  reply={reply} handleReply={handleReply} updateReply={updateReply}  comments={rootComments} allComments={comments} />
- 
-
  </div>)
 };
 

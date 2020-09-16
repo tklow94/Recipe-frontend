@@ -7,18 +7,10 @@ import { Grid } from '@material-ui/core';
 import Box from "@material-ui/core/Box";
 
 
-
-
 function Home({recipe, search, setSearch, setQuery}) {
-  
-    
-    
-    
-    
     return (
         <div>
             <AppAppBar/>
-            
             <Search search={search} setSearch={setSearch} setQuery={setQuery}/>
             <Box p={(2,4)}>
             <Grid container justify="center" spacing={2}>
@@ -31,8 +23,6 @@ function Home({recipe, search, setSearch, setQuery}) {
            dailyValue={recipe.recipe.totalDaily.ENERC_KCAL.quantity} 
            servings={recipe.recipe.yield}
            calories={recipe.recipe.calories}
-
-           
            />
            </Grid>))}
            </Grid>

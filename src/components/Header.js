@@ -6,13 +6,6 @@ import Link from '@material-ui/core/Link';
 import AppBar from '../components/onepirate/modules/components/AppBar';
 import Toolbar, { styles as toolbarStyles } from '../components/onepirate/modules/components/Toolbar';
 
-
-// const fontHeader = {
-//     color: rawTheme.palette.text.primary,
-//     fontWeight: rawTheme.typography.fontWeightMedium,
-//     fontFamily: rawTheme.typography.fontFamilySecondary,
-//     textTransform: 'uppercase',
-//   };
 const styles = (theme) => ({
   title: {
     fontSize: 24,
@@ -20,10 +13,6 @@ const styles = (theme) => ({
     fontWeight: "700",
     fontFamily: "'Roboto Condensed', sans-serif",
     color: '#e0e0e0',
-    
-      
-    
-
   },
   placeholder: toolbarStyles(theme).root,
   toolbar: {
@@ -52,7 +41,6 @@ const styles = (theme) => ({
 
 function AppAppBar(props) {
   const { classes } = props;
-
   const handleToken = () => {
     localStorage.removeItem("token")
   }
@@ -83,9 +71,6 @@ function AppAppBar(props) {
     }
   }
 
-  
-
-
   return (
     <div>
       <AppBar position="fixed" style={{ background: '#000000' }}>
@@ -98,13 +83,10 @@ function AppAppBar(props) {
             className={classes.title}
             href="/"
           >
-            {'InstaGraham'}
+            {'Meal Time'}
           </Link>
      
           <div className={classes.right}>
-
-            
-            
             <Link
               variant="h6"
               underline="none"

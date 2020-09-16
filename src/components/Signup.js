@@ -18,7 +18,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Chicken a la King
+        
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -49,24 +49,8 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp(props) {
   const classes = useStyles();
   const history = useHistory();
-
-  // const [users, setUsers] = useState([])
-
-  // const getUsers = () => {
-  //   fetch("http://localhost:3000/users")
-  //     .then(res => res.json())
-  //     .then(data => setUsers(data.user))
-  // }
-  
-  
-
-  // useEffect(() => {
-  //   getUsers()
-  // }, [])
-
   const onImage = (e) => {
     e.persist()
-    
     props.setEntry({
       ...props.entry,
       [e.target.name]: e.target.files[0]
@@ -84,9 +68,6 @@ console.log(props.entry)
         }else if (props.entry.username === ""){
           alert("Requires a Username")
         }
-        // else if (users.find(user => user.username === props.entry.username)){
-        //   alert("Username Already Taken")
-        // }
         else{
           const form = new FormData()
           form.append("username", props.entry.username)
@@ -94,12 +75,9 @@ console.log(props.entry)
           form.append("avatar", props.entry.avatar)
           fetch("http://localhost:3000/users", {
             method: "POST",
-            // headers: {
-            //   "Content-Type": "application/json",
-            // },
+         
             body: form
-            // JSON.stringify(props.entry)
-        
+          
           })
           .then(res => res.json())
           .then( data =>{ console.log(data)
@@ -110,20 +88,9 @@ console.log(props.entry)
         alert("Username or Password Incorrect")
         }
       })
-          // )
           }
         }
-          // .then(res =>  fetch("http://localhost:3000/login", {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "application/json"
-          //   },
-          //   body: JSON.stringify(props.entry)
-           
-          // })
-       
-     
-        
+         
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -170,7 +137,6 @@ console.log(props.entry)
                 label="Confirm Password"
                 type="password"
                 id="password_confirmation"
-                // autoComplete="current-password"
                 onChange={props.handleChange}
               />
             </Grid>

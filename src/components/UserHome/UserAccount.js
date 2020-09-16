@@ -142,8 +142,8 @@ userRecipes.map(recipe => {return (
   <div className="gallery-item-info">
 
 <ul>
-  <li className="gallery-item-likes"><span className="visually-hidden">Likes:</span><FaComment/> 2</li>
-  <li className="gallery-item-comments"><span className="visually-hidden">Comments:</span><FaHeart/> 2</li>
+  <li className="gallery-item-likes"><span className="visually-hidden">Likes:</span><FaComment/> 0</li>
+  <li className="gallery-item-comments"><span className="visually-hidden">Comments:</span><FaHeart/> 0</li>
 </ul>
 
 </div>
@@ -234,7 +234,7 @@ const onSubmit = (e) => {
   form.append("daily_value", recipe.daily_value)
   form.append("servings", recipe.servings)
   form.append("img", recipe.img)
-  form.append("source", username)
+  form.append("source", recipe.source)
   fetch("http://localhost:3000/recipes",{
     method: "POST",
    headers: {
@@ -388,7 +388,7 @@ const handleToken = () => {
           
             id="city"
             name="daily_value"
-            label="Daily Value"
+            label="Cook Time"
             fullWidth
             autoComplete="shipping address-level2"
             onChange={onChange}
@@ -471,7 +471,7 @@ const handleToken = () => {
 
   <div className="profile-bio">
 
-    <p><span className="profile-real-name">PlaceHolder </span> PlaceHolder</p>
+    <p><span className="profile-real-name"> </span> </p>
 
   </div>
 

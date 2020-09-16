@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import decode from 'jwt-decode'
-import {Link, useParams} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import './follower.css'
 import Modal from 'react-modal';
 

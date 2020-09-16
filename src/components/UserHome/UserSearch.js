@@ -10,11 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar'
 
-
-// save search in state and onsubmit filter results to display
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-  
     return (
       <div
         role="tabpanel"
@@ -67,10 +64,6 @@ function TabPanel(props) {
       }
   }));
 
-
-
-
-
 function UserSearch() {
 const loggedUser = decode(localStorage.getItem("token"))
 const username = loggedUser.username
@@ -82,7 +75,7 @@ const [user, setUser] = useState([])
 const [userResult, setUserResult] = useState([])
 const [userQuery, setUserQuery] = useState("")
 const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -141,7 +134,6 @@ const submitUser = (e) => {
     setUserResult(user);
     setUserQuery("")
 } 
-console.log(user)
 
 const handleSubmit = (e) => {
     e.preventDefault()
@@ -166,8 +158,6 @@ const handleClick = () => {
     setUserResult([]);
 }
 
-
-
     return (
         <div>
         <div className={classes.root}>
@@ -180,7 +170,6 @@ const handleClick = () => {
           variant="scrollable"
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
-         
         >
           <Tab  onClick={() => handleClick()} label="Recipes" {...a11yProps(0)} />
           <Tab  onClick={() => handleClick()} label="Users" {...a11yProps(1)} />
@@ -207,18 +196,7 @@ const handleClick = () => {
     </div>
     {mappedGoodies}
     {mappedUsers}
-    
-          </div>
-
-      
-        
-       
-      
-           
-                 
-          
-     
+    </div>
     )
 }
-
 export default UserSearch

@@ -14,10 +14,8 @@ const useStyle = makeStyles((theme) => ({
 function Avatars() {
     const classes = useStyle();
     return (
-      
-              <div className={classes.root}>
+    <div className={classes.root}>
       <Avatar />
-    
     </div>
     
     )

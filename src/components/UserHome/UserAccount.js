@@ -9,8 +9,6 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import {Img} from 'react-image'
 import { FaHome, FaSignOutAlt, FaSearch, FaPlusCircle, FaRssSquare, FaComment, FaHeart } from 'react-icons/fa'
-
-
 import {SlideDown} from 'react-slidedown'
 import 'react-slidedown/lib/slidedown.css'
 import decode from 'jwt-decode'
@@ -19,10 +17,6 @@ import Followings from './Followings'
 
 Modal.setAppElement('#root')
 function UserAccount() {
-  
-
-
-
 const [recipe, setRecipe] = useState({})
 const [userRecipes, setUserRecipes] = useState([])
 const loggedUser = decode(localStorage.getItem("token"))
@@ -37,10 +31,6 @@ const [avatar, setAvatar] = useState({})
 const [open, setOpen] = useState(false)
 const [searchOpen, setSearchOpen] = useState(false)
 const [avatarData, setAvatarData] = useState({})
-
-
-
-
 
 const showFollowsForm = () => {
   setFollowsForm(!followsForm)
@@ -57,7 +47,6 @@ const showFollowings = () => {
   showFollowsForm()
 }
 
-
 const fetchFollowers = () => {
   fetch(`http://localhost:3000/users/${userId}`)
   .then(res => res.json())
@@ -68,7 +57,6 @@ const fetchUserData = () => {
   .then(res => res.json())
   .then(data => setAvatarData(data.avatar))
 }
-
 
 useEffect(() => {
   fetchUserData()
@@ -83,30 +71,13 @@ const fetchFollowees = () => {
   .then(data => setUsersData(data.followees))
 }
 
-
 useEffect(() => {
   fetchFollowees()
 },[])
 
-
-
-
-
-
-
-
-
-
 const handleShowForm = () => {
-  
   setShowForm(!showForm)
- 
-  
 }
-
-
-
-
 
 const fetchUserRecipes = () => {
   fetch("http://localhost:3000/recipes/", {
@@ -122,54 +93,20 @@ const fetchUserRecipes = () => {
   })
 }
 
-
-
-
-
-
-
-
 const userRecipesMap = 
-
 userRecipes.map(recipe => {return (
-  
-
 <Link to={`recipecard/${recipe.id}`}>
-
 <div  className="gallery-item" >
-
   <img className="gallery-image" src={recipe.img} alt="not available" ></img>
   <div className="gallery-item-info">
-
-<ul>
-  <li className="gallery-item-likes"><span className="visually-hidden">Likes:</span><FaComment/> 0</li>
-  <li className="gallery-item-comments"><span className="visually-hidden">Comments:</span><FaHeart/> 0</li>
-</ul>
-
+    <ul>
+      <li className="gallery-item-likes"><span className="visually-hidden">Likes:</span><FaComment/> 0</li>
+      <li className="gallery-item-comments"><span className="visually-hidden">Comments:</span><FaHeart/> 0</li>
+    </ul>
+  </div>
 </div>
-
-	
-
-
-
-
-    </div>
-   
- 
- 
-  </Link>
-
-  
-  
- 
- 
-
- 
-
-
+</Link>
 )})
-
-console.log(recipe)
 
 const onImage = (e) => {
   e.persist()
@@ -253,10 +190,6 @@ useEffect(() => {
 }, [])
 
 
-
-
-
-
 const customStyles = {
   overlay : {
     backgroundColor: 'grey'
@@ -275,46 +208,25 @@ const handleToken = () => {
   localStorage.removeItem("token")
 }
 
-
-// console.log(recp.filter(r => r.name.toLowerCase() === "chicken"))
-
-
-// console.log(recp.filter(r=> r.name.includes('chicken')))
-// console.log(set)
-// console.log(recp)
-// console.log(change.value)
-
-
   return (
     
   <div>
-
-
     <header>
       <Link to="/">
     <button className="asIcon"><FaHome/></button>
     </Link>
-  
- 
     <button name="search" className="asIcon"> <Link to= './usersearch' style={{color:"black"}}><FaSearch/></Link></button>
-    
     <button className="asIcon"onClick={openSesame}><FaPlusCircle/>
     </button>  
     <button className="asIcon"><Link to="./feeds" style={{color:"black"}}><FaRssSquare/></Link>
     </button>  
-
     <Link onClick={handleToken} to="/signin">
     <button className="asIcon"><FaSignOutAlt/></button>
     </Link>
-  
-    
-    
     </header>
-    {/* <header> */}
-    
     <div className="container">
 
-<div className="profile">
+    <div className="profile">
 
   <div className="profile-image">
 
@@ -330,8 +242,6 @@ const handleToken = () => {
   
     </i>
     
-
- 
     <Modal isOpen={open}  onRequestClose={() => openSesame(false)} style={customStyles}>
          <React.Fragment>
            <form  onSubmit={onSubmit}>
@@ -425,8 +335,6 @@ const handleToken = () => {
             fullWidth
             variant="contained"
             color= "primary"
-        
-            // onClick={openSesame}
             >Submit</Button>
             </Grid>
         </Grid>
@@ -478,7 +386,7 @@ const handleToken = () => {
 </div>
 
     </div>
-    {/* </header> */}
+  
     <div className="container">
       <div className="gallery">
      
